@@ -1,0 +1,46 @@
+{
+  "name": "simplicity-installer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test mocha tests/*.spec.js",
+    "test:coverage": "nyc npm test",
+    "commit": "git-cz",
+    "lint": "npx eslint",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simplicity-js/installer.git"
+  },
+  "author": "simplymichael <simplymichaelorji@gmail.com> (https://github.com/simplymichael)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simplicity-js/installer/issues"
+  },
+  "homepage": "https://github.com/simplicity-js/installer#readme",
+  "devDependencies": {
+    "chai": "5.1.1",
+    "commitizen": "4.3.0",
+    "cross-env": "7.0.3",
+    "cz-conventional-changelog": "3.3.0",
+    "eslint": "9.9.0",
+    "ghooks": "2.0.4",
+    "mocha": "10.7.3",
+    "nyc": "17.0.0",
+    "sinon": "18.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "pre-commit": "npm run lint && npm run test:coverage"
+    }
+  },
+  "engines": {
+    "node": ">=18.18.2",
+    "npm": ">=9.8.1"
+  }
+}
