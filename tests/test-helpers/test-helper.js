@@ -74,8 +74,7 @@ function spyOnConsoleOutput(object = "stdout") {
     fs.appendFileSync(logFile, util.inspect(arguments, { depth: 12 }));
   };
 
-  // Handle console output due to migrate-mongoose package
-  // using an older version of mongoose. Handle any other such cases
+  // Handle any console error output
   // that might arise from pacakges we have no control over.
   const oldConsoleError = console.error;
   console.error = function() {
