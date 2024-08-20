@@ -52,16 +52,6 @@ function showVersionInfo() {
 
 async function runCreateProjectCommand(projectName) {
   const currDir = normalizePath(process.cwd());
-  const OPTIONS_LIST = ["help"];
-
-  Object.keys(params).forEach((o) => {
-    const option = OPTIONS_LIST.includes(o) ? o : "";
-
-    switch(option) {
-    case "help": showHelp(HELP_MANUAL); return;
-    default: break;
-    }
-  });
 
   return await createProject(currDir, projectName);
 }
