@@ -57,13 +57,14 @@ async function runCreateProjectCommand(projectName) {
 }
 
 function main(c) {
-  const COMMAND_LIST = [ "help", "version", "create-project" ];
+  const COMMAND_LIST = [ "help", "version", "new", "create-project" ];
   const command = COMMAND_LIST.includes(c) ? c : "";
 
   try {
     switch(command) {
     case "help": showHelp(HELP_MANUAL); break;
     case "version": showVersionInfo(); break;
+    case "new": 
     case "create-project": runCreateProjectCommand(PARAMETER_2); break;
     default:
       if(command) {

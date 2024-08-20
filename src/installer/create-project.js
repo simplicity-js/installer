@@ -76,10 +76,6 @@ module.exports = async function createProject(dir, name) {
     if(projectDir === cwd) {
       deleteFileOrDirectory(`${projectDir}/simplicity.zip`);
     } else {
-      copy(
-        `${dir}/${installerFilename}`,
-        `${cwd}/${installerFilename}`
-      );
       deleteFileOrDirectory(projectDir);
     }
 

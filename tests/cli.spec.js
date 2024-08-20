@@ -225,5 +225,28 @@ describe("cli", function() {
 
       this.directoriesToDelete.push(projectDir);
     });
+
+    it("new is an alias for 'create-project'", async function() {
+      this.timeout(1000 * 60);
+
+      const projectName = "cli-test-project-new-command";
+      const projectDir = path.join(currDir, projectName);
+      const { sinonSpy, restore } = spyOnConsoleOutput();
+
+      expect(pathExists(projectDir)).to.be.false;
+
+      await exec(`node ${srcDir}/cli new`, [projectName]);
+      restore();
+
+      const expected = new RegExp(
+        `To start the app, run \.*chdir ${projectName} && \.*npm run start`
+      );
+
+      expect(pathExists(projectDir)).to.be.true;
+      expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
+      expect(verifyProjectDirectory(projectDir)).to.be.true;
+
+      this.directoriesToDelete.push(projectDir);
+    });
   });
 });
