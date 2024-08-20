@@ -226,7 +226,7 @@ describe("cli", function() {
       this.directoriesToDelete.push(projectDir);
     });
 
-    it("new is an alias for 'create-project'", async function() {
+    it("should accept 'new' as an alias for 'create-project'", async function() {
       this.timeout(1000 * 60);
 
       const projectName = "cli-test-project-new-command";
