@@ -1,5 +1,6 @@
 "use strict";
 
+const childProcess = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
 const util = require("node:util");
@@ -7,6 +8,7 @@ const sinon = require("sinon");
 const chai = () => import("chai").then(chai => chai);
 const { createDirectory, createFile, isDirectory, isEmpty, pathExists
 } = require("../../src/helpers/file-system");
+const { print } = require("../../src/helpers/printer");
 
 const testsDir = path.resolve(__dirname, "..").replace(/\\/g, "/");
 const logDir  = `${testsDir}/.logs`;
@@ -23,6 +25,42 @@ after(function(done) {
 });
 
 (createDirectory(logDir) && createFile(logFile) && createFile(errFile)) || process.exit(1);
+
+function exec(command, args) {
+  args = args || [];
+
+  return new Promise((resolve, reject) => {
+    let output = "";
+    const start = Date.now();
+
+    const ps = childProcess.spawn(command, args, {
+      shell: true,
+      env: { ...process.env, NODE_ENV: "test" },
+    });
+
+    ps.stdout.on("data", (data) => output += data);
+    ps.stderr.on("data", (data) => output += data);
+    ps.on("error", (err) => reject(err.toString()));
+    ps.on("exit", (code, signal) => {
+      const duration = Date.now() - start;
+      resolve({ code, signal, duration });
+    });
+
+    ps.on("close", (code) => {
+      if(code === 0) {
+        print(output);
+        resolve(output);
+      } else {
+        print(output);
+        reject(output);
+      }
+    });
+  });
+};
+
+function normalizeHelpManual(manual) {
+  return manual.replace(/\r?\n/gm, "");
+}
 
 function spyOnConsoleOutput(object = "stdout") {
   object = `_${object}`;
@@ -113,6 +151,8 @@ function verifyProjectDirectory(dir) {
 
 module.exports = {
   chai,
+  exec,
+  normalizeHelpManual,
   spyOnConsoleOutput,
-  verifyProjectDirectory, 
+  verifyProjectDirectory,
 };

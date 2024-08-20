@@ -76,7 +76,7 @@ describe("installer", function() {
     it("should install the project in the current directory if no project name is specified", async function() {
       this.timeout(1000 * 60);
 
-      const projectName = "projectTest";
+      const projectName = "test-project";
       const projectDir = path.join(currDir, projectName);
       const { sinonSpy, restore } = spyOnConsoleOutput();
 

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        environment: ['production']
+        node-version: [18.x, 'latest']
+
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Check code standards
+      run: npm run lint
+
+    - name: Build
+      run: npm run build --if-present
+
+    - name: Gather coverage report
+      run: npm run test:coverage
+      env:
+         NODE_ENV: ${{ matrix.environment }}
+      #  CI: true

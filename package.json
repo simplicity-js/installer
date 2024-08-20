@@ -4,10 +4,10 @@
   "description": "",
   "main": "src/index.js",
   "bin": {
-    "simplicity-installer": "src/cli.js"
+    "simplicity-installer": "src/index.js"
   },
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha tests/installer.spec.js tests/cli.spec.js",
+    "test": "cross-env NODE_ENV=test mocha tests/installer.spec.js tests/cli.spec.js tests/index.spec.js",
     "test:coverage": "nyc npm test",
     "commit": "git-cz",
     "lint": "npx eslint",

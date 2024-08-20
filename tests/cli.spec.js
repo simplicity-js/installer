@@ -1,58 +1,20 @@
 "use strict";
 
-const childProcess = require("node:child_process");
 const os = require("node:os");
 const path = require("node:path");
 const { createDirectory, deleteFileOrDirectory, normalizePath,
   pathExists, readLinesFromFile
 } = require("../src/helpers/file-system");
-const { print } = require("../src/helpers/printer");
-const { chai, spyOnConsoleOutput, verifyProjectDirectory } = require(
-  "./test-helpers/test-helper");
+const { chai, exec, normalizeHelpManual, spyOnConsoleOutput,
+  verifyProjectDirectory
+} = require("./test-helpers/test-helper");
 
 const EOL = os.EOL;
 const PADDING = "  ";
 const chdir = process.chdir;
 const currDir = normalizePath(__dirname);
-const binDir = normalizePath(path.join(currDir, "..", "src"));
-const HELP_MANUAL = `${binDir}/manual/help.stub`;
-
-function exec(command, args) {
-  args = args || [];
-
-  return new Promise((resolve, reject) => {
-    let output = "";
-    const start = Date.now();
-
-    const ps = childProcess.spawn(command, args, {
-      //stdio: ["ignore", out, err],
-      shell: true,
-      env: { ...process.env, NODE_ENV: "test" },
-    });
-
-    ps.stdout.on("data", (data) => output += data);
-    ps.stderr.on("data", (data) => output += data);
-    ps.on("error", (err) => reject(err.toString()));
-    ps.on("exit", (code, signal) => {
-      const duration = Date.now() - start;
-      resolve({ code, signal, duration });
-    });
-
-    ps.on("close", (code) => {
-      if(code === 0) {
-        print(output);
-        resolve(output);
-      } else {
-        print(output);
-        reject(output);
-      }
-    });
-  });
-};
-
-function normalizeHelpManual(manual) {
-  return manual.replace(/\r?\n/gm, "");
-}
+const srcDir = normalizePath(path.join(currDir, "..", "src"));
+const HELP_MANUAL = `${srcDir}/manual/help.stub`;
 
 describe("cli", function() {
   this.timeout(1000 * 120);
@@ -83,7 +45,7 @@ describe("cli", function() {
     it("should display the help manual if the string 'help' is passed", async function() {
       const { sinonSpy, restore } = spyOnConsoleOutput();
 
-      await exec(`node ${binDir}/cli help`);
+      await exec(`node ${srcDir}/cli help`);
       restore();
 
       const expected = this.helpManual;
@@ -96,7 +58,7 @@ describe("cli", function() {
     it("should display the help manual if the --help option is passed", async function() {
       const { sinonSpy, restore } = spyOnConsoleOutput();
 
-      await exec(`node ${binDir}/cli --help`);
+      await exec(`node ${srcDir}/cli --help`);
       restore();
 
       const expected = this.helpManual;
@@ -109,7 +71,7 @@ describe("cli", function() {
     it("should display the help manual if the -h option is passed", async function() {
       const { sinonSpy, restore } = spyOnConsoleOutput();
 
-      await exec(`node ${binDir}/cli -h`);
+      await exec(`node ${srcDir}/cli -h`);
       restore();
 
       const expected = this.helpManual;
@@ -122,7 +84,7 @@ describe("cli", function() {
     it("should display the help manual if no command is passed", async function() {
       const { sinonSpy, restore } = spyOnConsoleOutput();
 
-      await exec(`node ${binDir}/cli`);
+      await exec(`node ${srcDir}/cli`);
       restore();
 
       const expected = this.helpManual;
@@ -143,7 +105,7 @@ describe("cli", function() {
     it("should display version information if the string 'version' is passed", async function() {
       const { sinonSpy, restore } = spyOnConsoleOutput();
       chdir(this.parentDir);
-      await exec(`node ${binDir}/cli version`);
+      await exec(`node ${srcDir}/cli version`);
       restore();
 
       const expected = this.versionInfo.trim();
@@ -156,7 +118,7 @@ describe("cli", function() {
     it("should display version information if the --version option is passed", async function() {
       const { sinonSpy, restore } = spyOnConsoleOutput();
       chdir(this.parentDir);
-      await exec(`node ${binDir}/cli --version`);
+      await exec(`node ${srcDir}/cli --version`);
       restore();
 
       const expected = this.versionInfo.trim();
@@ -169,7 +131,7 @@ describe("cli", function() {
     it("should display version information if the -v option is passed", async function() {
       const { sinonSpy, restore } = spyOnConsoleOutput();
       chdir(this.parentDir);
-      await exec(`node ${binDir}/cli -v`);
+      await exec(`node ${srcDir}/cli -v`);
       restore();
 
       const expected = this.versionInfo.trim();
@@ -182,7 +144,7 @@ describe("cli", function() {
 
   describe("create-project", function() {
     before(function(done) {
-      this.command = `node ${binDir}/cli create-project`;
+      this.command = `node ${srcDir}/cli create-project`;
       this.directoriesToDelete = [];
 
       /*
@@ -241,7 +203,7 @@ describe("cli", function() {
     it("should install the project in the current directory if no project name is specified", async function() {
       this.timeout(1000 * 60);
 
-      const projectName = "projectCliTest";
+      const projectName = "cli-test-project";
       const projectDir = path.join(currDir, projectName);
       const { sinonSpy, restore } = spyOnConsoleOutput();
 
