@@ -65,8 +65,7 @@ describe("installer", function() {
       const expected = new RegExp(
         `To start the app, run \.*chdir ${projectName} && \.*npm run start`
       );
-      //console.log("SINON SPY CALLED: ", sinonSpy.calledWithMatch(expected));
-      //console.log("SINON CALLS: ", sinonSpy.getCalls());
+
       expect(pathExists(projectDir)).to.be.true;
       expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
       expect(verifyProjectDirectory(projectDir)).to.be.true;

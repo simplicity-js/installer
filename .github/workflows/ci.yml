@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest']
-        #environment: ['production']
+        environment: ['production']
         node-version: [18.x, 'latest']
 
     steps:
@@ -38,5 +38,5 @@ jobs:
       run: npm run test:coverage
       env:
          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-         #NODE_ENV: ${{ matrix.environment }}
+         NODE_ENV: ${{ matrix.environment }}
       #  CI: true
