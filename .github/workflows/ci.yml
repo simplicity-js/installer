@@ -36,6 +36,7 @@ jobs:
 
     - name: Gather coverage report
       run: npm run test:coverage
-      #env:
-      #   NODE_ENV: ${{ matrix.environment }}
+      env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         #NODE_ENV: ${{ matrix.environment }}
       #  CI: true
