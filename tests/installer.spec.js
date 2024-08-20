@@ -68,8 +68,9 @@ describe("installer", function() {
       console.log("SINON SPY CALLED: ", sinonSpy.calledWithMatch(expected));
       console.log("SINON CALLS: ", sinonSpy.getCalls());
       expect(pathExists(projectDir)).to.be.true;
-      expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
       expect(verifyProjectDirectory(projectDir)).to.be.true;
+      expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
+      //expect(verifyProjectDirectory(projectDir)).to.be.true;
 
       directoriesToDelete.push(projectDir);
     });
