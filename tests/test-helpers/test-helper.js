@@ -5,7 +5,8 @@ const path = require("node:path");
 const util = require("node:util");
 const sinon = require("sinon");
 const chai = () => import("chai").then(chai => chai);
-const { createDirectory, createFile } = require("../../src/helpers/file-system");
+const { createDirectory, createFile, isDirectory, isEmpty, pathExists
+} = require("../../src/helpers/file-system");
 
 const testsDir = path.resolve(__dirname, "..").replace(/\\/g, "/");
 const logDir  = `${testsDir}/.logs`;
@@ -65,7 +66,53 @@ function spyOnConsoleOutput(object = "stdout") {
   };
 }
 
+function verifyProjectDirectory(dir) {
+  let verifiedProjectDir = true;
+
+  const expectedFiles = ["bin", "src", "tests", ".env", "package.json"];
+  const expectedSrcFiles = [
+    "app",
+    "bootstrap",
+    "config",
+    "public",
+    "routes",
+    "service-providers",
+    "views",
+    "index.js",
+  ];
+
+  for(const filename of expectedFiles) {
+    if(!pathExists(path.join(dir, filename))) {
+      verifiedProjectDir = false;
+      break;
+    }
+  }
+
+  for(const filename of expectedSrcFiles) {
+    const file = path.join(dir, "src", filename);
+
+    if(!verifiedProjectDir) {
+      break;
+    }
+
+    if(!pathExists(file)) {
+      verifiedProjectDir = false;
+      break;
+    }
+
+    if(filename !== "index.js") {
+      if(!isDirectory(file) || isEmpty(file)) {
+        verifiedProjectDir = false;
+        break;
+      }
+    }
+  }
+
+  return verifiedProjectDir;
+}
+
 module.exports = {
   chai,
   spyOnConsoleOutput,
+  verifyProjectDirectory, 
 };

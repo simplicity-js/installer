@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
+  "bin": {
+    "simplicity-installer": "src/cli.js"
+  },
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha tests/*.spec.js",
+    "test": "cross-env NODE_ENV=test mocha tests/installer.spec.js tests/cli.spec.js",
     "test:coverage": "nyc npm test",
     "commit": "git-cz",
     "lint": "npx eslint",
@@ -42,5 +45,9 @@
   "engines": {
     "node": ">=18.18.2",
     "npm": ">=9.8.1"
+  },
+  "dependencies": {
+    "extract-zip": "2.0.1",
+    "require-without-cache": "0.0.6"
   }
 }

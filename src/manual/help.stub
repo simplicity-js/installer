@@ -1,0 +1,9 @@
+Simplicity Installer - create-project
+
+USAGE: simplicity-installer create-project [path] [options]
+
+Description:
+  Create a new Simplicity project at <path> or the current working directory if <path> is not specified.
+
+Options:
+  --help (-h)     Show this help manual.

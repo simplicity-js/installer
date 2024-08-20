@@ -1,16 +1,40 @@
 "use strict";
 
 const fs = require("node:fs");
+const path = require("node:path");
+const readline = require("node:readline");
 
 module.exports = {
+  copy,
   createDirectory,
   createFile,
   deleteFileOrDirectory,
+  getFilename,
+  listDirectoryContents,
   isDirectory,
   isEmpty,
   isFile,
+  normalizePath,
   pathExists,
+  readFromFile, 
+  readLinesFromFile,
+  writeToFile,
 };
+
+function copy(src, dest) {
+  try {
+    if(isDirectory(src)) {
+      fs.cpSync(src, dest, { recursive: true });
+    } else if(isFile(src)) {
+      fs.cpSync(src, dest);
+    }
+
+    return true;
+  } catch(err) {
+    console.log("Failed to copy '%s' to '%s'. Error: %o", src, dest, err);
+    return false;
+  }
+}
 
 /**
  * @param {String} dir: The directory to create.
@@ -59,12 +83,36 @@ function deleteFileOrDirectory(file) {
   }
 }
 
+function getFileExtension(file) {
+  return isFile(file) ? path.extname(file) : "";
+}
+
+function getFilename(file, withExtension) {
+  if(withExtension) {
+    return path.basename(file);
+  } else {
+    return path.basename(file, getFileExtension(file));
+  }
+}
+
+function listDirectoryContents(dir) {
+  return fs.readdirSync(dir);
+}
+
 function isDirectory(path) {
   return pathExists(path) && pathInfo(path).isDirectory();
 }
 
+function isEmpty(dir) {
+  return listDirectoryContents(dir).length === 0;
+}
+
 function isFile(path) {
   return pathExists(path) && pathInfo(path).isFile();
+}
+
+function normalizePath(path) {
+  return path.replace(/\\/g, "/");
 }
 
 function pathExists(path) {
@@ -72,19 +120,51 @@ function pathExists(path) {
 }
 
 function pathInfo(path) {
-  /* https://stackoverflow.com/a/15630832/1743192
-  const stats = fs.lstatSync(path);
-  stats.isFile()
-  stats.isDirectory()
-  stats.isBlockDevice()
-  stats.isCharacterDevice()
-  stats.isSymbolicLink() // (only valid with fs.lstat())
-  stats.isFIFO()
-  stats.isSocket()
-  */
   return fs.lstatSync(path);
 }
 
-function isEmpty(dir) {
-  return listDirectoryContents(dir).length === 0;
+function readFromFile(path, encoding) {
+  return fs.readFileSync(path, encoding || "utf8");
+}
+
+/**
+ * @param {String} file: The file to read from
+ * @param {Object} options (optional): options passed to fs.createReadStream
+ */
+async function* readLinesFromFile(file, options) {
+  const fileStream = await createSafeReadStream(file, options);
+  const lineData = readline.createInterface({
+    input: fileStream,
+    terminal: false,
+    crlfDelay: Infinity,
+    historySize: 0
+  });
+
+  for await(const line of lineData) {
+    yield line;
+  }
+
+
+  function createSafeReadStream(filename, options) {
+    return new Promise((resolve, reject) => {
+      const fileStream = fs.createReadStream(filename, options);
+
+      fileStream.on("error", reject).on("open", () => {
+        resolve(fileStream);
+      });
+    });
+  }
+}
+
+/**
+ * echo str > path.
+ *
+ * @param {String} path
+ * @param {String} str
+ * @param {Object} options (optional)
+ */
+function writeToFile(path, str, options) {
+  const { encoding = "utf8", flag = "a", mode = 0o666 } = options || {};
+
+  fs.writeFileSync(path, str, { encoding, flag, mode  });
 }
