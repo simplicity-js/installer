@@ -50,27 +50,26 @@ describe("installer", function() {
       expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
     });
 
-    it.only("should create the project directory if it does not exist and install the project", async function() {
+    it("should create the project directory if it does not exist and install the project", async function() {
       this.timeout(1000 * 60);
 
       const projectName = "testProject";
       const projectDir = path.join(currDir, projectName);
-      //const { sinonSpy, restore } = spyOnConsoleOutput();
+      const { sinonSpy, restore } = spyOnConsoleOutput();
 
       expect(pathExists(projectDir)).to.be.false;
 
       await createProject(currDir, projectName);
-      //restore();
+      restore();
 
-      /*const expected = new RegExp(
+      const expected = new RegExp(
         `To start the app, run \.*chdir ${projectName} && \.*npm run start`
-      );*/
+      );
       //console.log("SINON SPY CALLED: ", sinonSpy.calledWithMatch(expected));
       //console.log("SINON CALLS: ", sinonSpy.getCalls());
       expect(pathExists(projectDir)).to.be.true;
+      expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
       expect(verifyProjectDirectory(projectDir)).to.be.true;
-      //expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
-      //expect(verifyProjectDirectory(projectDir)).to.be.true;
 
       directoriesToDelete.push(projectDir);
     });

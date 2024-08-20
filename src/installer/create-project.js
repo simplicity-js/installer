@@ -92,7 +92,7 @@ module.exports = async function createProject(dir, name) {
 
   try {
     await unzip(`${projectDir}/simplicity.zip`, projectDir);
-  } catch(e) { console.log("UNZIP ERROR: ", e);
+  } catch(e) {
     writeToFile(stdoutRedirectFile, require("node:util").format(e));
 
     projectSpinner.fail(EOL + marker.error.text(
