@@ -52,7 +52,7 @@ module.exports = async function createProject(dir, name) {
   try {
     const tokenFile = path.join(__dirname, ".github-token");
     const fileToken = pathExists(tokenFile) ? readFromFile(tokenFile) : "";
-    const envToken = process.env.GITHUB_TOKEN;
+    const envToken = process.env.GH_TOKEN;
     const token = fileToken ? fileToken : envToken ? envToken : "";
     const downloadCommand = generateGithubRepoDownloadCommand({
       owner  : "simplicity-js",
