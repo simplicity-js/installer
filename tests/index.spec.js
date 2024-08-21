@@ -19,7 +19,7 @@ const currDir = normalizePath(__dirname);
 const srcDir = normalizePath(path.join(currDir, "..", "src"));
 const HELP_MANUAL = `${srcDir}/manual/help.stub`;
 
-describe("simplicity-installer", function() {
+describe("simplicity", function() {
   let expect;
 
   before(async function() {

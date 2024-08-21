@@ -2,12 +2,12 @@
 
 Installer for [Simplicity MVC Framework][simplicity-framework].
 
-## Installation
+## Installation and usage
 
 ```bash
 $ npm install -g @simplicityjs/installer
 
-$ simplicity-installer new example-app
+$ simplicity new example-app
 ```
 
 
