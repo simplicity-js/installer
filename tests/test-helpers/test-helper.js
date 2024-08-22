@@ -107,6 +107,7 @@ function verifyProjectDirectory(dir) {
   let verifiedProjectDir = true;
 
   const expectedFiles = ["bin", "src", "tests", ".env", "package.json"];
+  const expectedBinFiles = ["bob"];
   const expectedSrcFiles = [
     "app",
     "bootstrap",
@@ -115,11 +116,23 @@ function verifyProjectDirectory(dir) {
     "routes",
     "service-providers",
     "views",
-    "index.js",
   ];
 
   for(const filename of expectedFiles) {
     if(!pathExists(path.join(dir, filename))) {
+      verifiedProjectDir = false;
+      break;
+    }
+  }
+
+  for(const filename of expectedBinFiles) {
+    const file = path.join(dir, "bin", filename);
+
+    if(!verifiedProjectDir) {
+      break;
+    }
+
+    if(!pathExists(file)) {
       verifiedProjectDir = false;
       break;
     }

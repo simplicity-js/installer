@@ -161,7 +161,7 @@ module.exports = async function createProject(dir, name) {
       msg += color.text(`chdir ${projectName} && `);
     }
 
-    msg += `${color.text(`${appStartMsg}npm run start`)}.`;
+    msg += `${color.text(`${appStartMsg}[node] bob serve`)}.`;
 
     print();
     print(msg);

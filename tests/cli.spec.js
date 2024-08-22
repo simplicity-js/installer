@@ -190,7 +190,7 @@ describe("cli", function() {
       restore();
 
       const expected = new RegExp(
-        `To start the app, run \.*chdir ${projectName} && \.*npm run start`
+        `To start the app, run \.*chdir ${projectName} && \.*bob serve`
       );
 
       expect(pathExists(projectDir)).to.be.true;
@@ -217,7 +217,7 @@ describe("cli", function() {
       restore();
       chdir(currDir);
 
-      const expected = /To start the app, run .*npm run start/;
+      const expected = /To start the app, run .*bob serve/;
 
       expect(pathExists(projectDir)).to.be.true;
       expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
@@ -239,7 +239,7 @@ describe("cli", function() {
       restore();
 
       const expected = new RegExp(
-        `To start the app, run \.*chdir ${projectName} && \.*npm run start`
+        `To start the app, run \.*chdir ${projectName} && \.*bob serve`
       );
 
       expect(pathExists(projectDir)).to.be.true;
