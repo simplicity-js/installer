@@ -41,9 +41,6 @@ module.exports = async function createProject(dir, name) {
     );
   }
 
-  //const repoUrl = "https://github.com/simplicity-js/simplicity/releases/latest";
-  //const repoUrl = "https://github.com/simplicity-js/simplicity";
-
   print();
 
   const projectSpinner = ora(
@@ -121,7 +118,7 @@ module.exports = async function createProject(dir, name) {
     chdir(projectDir);
   }
 
-  copy(".env.example", ".env"); // The CWD is the project directory
+  copy(".env.example", ".env");
 
   print();
 
@@ -161,7 +158,7 @@ module.exports = async function createProject(dir, name) {
       msg += color.text(`chdir ${projectName} && `);
     }
 
-    msg += `${color.text(`${appStartMsg}[node] bob start`)}.`;
+    msg += `${color.text(`${appStartMsg}node bob start`)}.`;
 
     print();
     print(msg);

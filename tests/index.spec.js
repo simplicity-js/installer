@@ -72,7 +72,7 @@ describe("simplicity", function() {
       restore();
 
       const expected = new RegExp(
-        `To start the app, run \.*chdir ${projectName} && \.*bob start`
+        `To start the app, run \.*chdir ${projectName} && \.*node bob start`
       );
 
       expect(pathExists(projectDir)).to.be.true;
@@ -100,7 +100,7 @@ describe("simplicity", function() {
       restore();
       process.chdir(currDir);
 
-      const expected = /To start the app, run .*bob start/;
+      const expected = /To start the app, run .*node bob start/;
 
       expect(pathExists(projectDir)).to.be.true;
       expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
@@ -278,7 +278,7 @@ describe("simplicity", function() {
         restore();
 
         const expected = new RegExp(
-          `To start the app, run \.*chdir ${projectName} && \.*bob start`
+          `To start the app, run \.*chdir ${projectName} && \.*node bob start`
         );
 
         expect(pathExists(projectDir)).to.be.true;
@@ -305,7 +305,7 @@ describe("simplicity", function() {
         restore();
         chdir(currDir);
 
-        const expected = /To start the app, run .*bob start/;
+        const expected = /To start the app, run .*node bob start/;
 
         expect(pathExists(projectDir)).to.be.true;
         expect(sinonSpy.calledWithMatch(expected)).to.equal(true);
@@ -327,7 +327,7 @@ describe("simplicity", function() {
         restore();
 
         const expected = new RegExp(
-          `To start the app, run \.*chdir ${projectName} && \.*bob start`
+          `To start the app, run \.*chdir ${projectName} && \.*node bob start`
         );
 
         expect(pathExists(projectDir)).to.be.true;
