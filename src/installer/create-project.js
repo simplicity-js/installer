@@ -110,6 +110,7 @@ module.exports = async function createProject(dir, name) {
     }
   }
 
+  deleteFileOrDirectory(`${projectDir}/.github`);
   deleteFileOrDirectory(`${projectDir}/simplicity.zip`);
 
   projectSpinner.succeed(marker.success.text(`Project '${projectName}' created.`));
