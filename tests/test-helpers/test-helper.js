@@ -106,33 +106,20 @@ function spyOnConsoleOutput(object = "stdout") {
 function verifyProjectDirectory(dir) {
   let verifiedProjectDir = true;
 
-  const expectedFiles = ["bin", "src", "tests", ".env", "package.json"];
-  const expectedBinFiles = ["bob"];
+  const expectedFiles = ["src", "tests", ".env", "bob", "package.json"];
   const expectedSrcFiles = [
     "app",
     "bootstrap",
     "config",
     "public",
+    "resources",
     "routes",
     "service-providers",
-    "views",
   ];
+  const expectedResourceFiles = ["views"];
 
   for(const filename of expectedFiles) {
     if(!pathExists(path.join(dir, filename))) {
-      verifiedProjectDir = false;
-      break;
-    }
-  }
-
-  for(const filename of expectedBinFiles) {
-    const file = path.join(dir, "bin", filename);
-
-    if(!verifiedProjectDir) {
-      break;
-    }
-
-    if(!pathExists(file)) {
       verifiedProjectDir = false;
       break;
     }
@@ -155,6 +142,24 @@ function verifyProjectDirectory(dir) {
         verifiedProjectDir = false;
         break;
       }
+    }
+  }
+
+  for(const filename of expectedResourceFiles) {
+    const file = path.join(dir, "src", "resources", filename);
+
+    if(!verifiedProjectDir) {
+      break;
+    }
+
+    if(!pathExists(file)) {
+      verifiedProjectDir = false;
+      break;
+    }
+
+    if(!isDirectory(file)) {
+      verifiedProjectDir = false;
+      break;
     }
   }
 
