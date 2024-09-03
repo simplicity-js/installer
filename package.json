@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "extract-zip": "2.0.1",
+    "ora": "8.1.0",
     "require-without-cache": "0.0.6",
     "semver": "7.6.3"
   }
